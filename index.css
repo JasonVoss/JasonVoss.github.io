@@ -1,0 +1,43 @@
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    background-color: #f3f3f3;
+  }
+
+  li {
+    float: left;
+  }
+
+  li a {
+    display: block;
+    color: #333;
+    text-align: center;
+    padding: 10px 12px;
+    text-decoration: none;
+    border-right: 1px solid #bbb;
+  }
+
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
+
+  .activebarcovid, .activebarregion {
+    background-color: #04AA6D;
+  }
+
+  table {
+    border: 1px solid black;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  th,
+td {
+  border: 1px solid black;
+  width: 500px;
+  overflow: hidden;
+}

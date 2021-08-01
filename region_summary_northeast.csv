@@ -1,0 +1,13 @@
+month,cases,deaths,mortality,region
+jan,0,0,0.00,Northeast
+feb,1,0,0.00,Northeast
+mar,111103,2455,2.21,Northeast
+apr,579205,39682,6.85,Northeast
+may,774289,58849,7.60,Northeast
+jun,845341,67364,7.97,Northeast
+jul,918398,70095,7.63,Northeast
+aug,986148,71395,7.24,Northeast
+sep,1064389,72811,6.84,Northeast
+oct,1247306,74881,6.00,Northeast
+nov,1795925,79512,4.43,Northeast
+dec,2828957,94056,3.32,Northeast

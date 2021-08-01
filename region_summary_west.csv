@@ -1,0 +1,13 @@
+month,cases,deaths,mortality,region
+jan,5,0,0.00,West
+feb,37,0,0.00,West
+mar,22371,574,2.57,West
+apr,107774,4598,4.27,West
+may,218001,8900,4.08,West
+jun,451190,12301,2.73,West
+jul,942883,18842,2.00,West
+aug,1273138,25452,2.00,West
+sep,1501351,30218,2.01,West
+oct,1850925,33897,1.83,West
+nov,2740112,39504,1.44,West
+dec,4512632,54938,1.22,West

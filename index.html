@@ -1,0 +1,344 @@
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
+<head>
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body onload="changeRegion('Northeast','cases')">
+  <script>
+    const mortality_annotations = [{
+      note: {
+        label: "By October a trend of lessening mortality",
+        title: "Decreasing Mortality"
+      },
+      x: 525,
+      y: 200,
+      dy: -70,
+      dx: -100
+    }]
+
+    const cases_ne_annotations = [{
+      note: {
+        label: "In April and May the Northeast experiences a surge in cases.",
+        title: "Northeast Early Surge"
+      },
+      x: 250,
+      y: 400,
+      dy: -70,
+      dx: 100
+    }]
+
+    const cases_s_annotations = [{
+      note: {
+        label: "A large surge of cases towards the end of the year. Covid tests are readily available at this time.",
+        title: "Year End Surge"
+      },
+      x: 625,
+      y: 50,
+      dy: 100,
+      dx: -100
+    }]
+
+    const cases_w_annotations = [{
+      note: {
+        label: "The very first infection was in this region. Early prevention measures slowed the spread.",
+        title: "Early Prevention"
+      },
+      x: 250,
+      y: 500,
+      dy: -130,
+      dx: 100
+    }]
+
+    const cases_m_annotations = [{
+      note: {
+        label: "Parabolic increase in cases",
+        title: "The Midwest"
+      },
+      x: 525,
+      y: 300,
+      dy: -70,
+      dx: -100
+    }]
+
+    const deaths_ne_annotations = [{
+      note: {
+        label: "In April and May the Northeast experiences a surge in deaths. Mortality Rate is at its highest here. The deaths are disproportionate compared to all other regions and times.",
+        title: "Northeast Early Surge"
+      },
+      x: 275,
+      y: 350,
+      dy: -80,
+      dx: 100
+    }]
+
+    const deaths_s_annotations = [{
+      note: {
+        label: "Deaths steadily increase over the year.",
+        title: "Steadily Increase"
+      },
+      x: 455,
+      y: 200,
+      dy: 100,
+      dx: -100
+    }]
+
+    const deaths_w_annotations = [{
+      note: {
+        label: "The very first infection was in this region. Early prevention measures slowed the spread.",
+        title: "Early Prevention"
+      },
+      x: 250,
+      y: 500,
+      dy: -130,
+      dx: 100
+    }]
+
+    const deaths_m_annotations = [{
+      note: {
+        label: "High initial deaths. Second highest early mortality.  Lockdowns are enforced",
+        title: "The Midwest"
+      },
+      x: 300,
+      y: 500,
+      dy: -50,
+      dx: 100
+    }]
+  </script>
+  <script>
+    var n_p = "In the Northeast we see the inital early surge of cases and deaths beginning in April. "
+    n_p += "The mortality is highest in the Northeast during this initial surge. "
+
+    m_p = "The midwest shows second highest mortality ratings. As a result lockdowns were heavily enforced in Chicago, the largest city."
+
+    w_p = "The west shows overall lower infections rates than the other regions. "
+    w_p += "Early prevention measures were taken and lockdowns enforced. "
+
+    s_p = "The south shows a much higher surge at the end of the year relative to other regions. The South did not experience an early surge. "
+    s_p = "The mortality rates in the South are much lower in contrast to the Northeast. "
+
+
+    function changeCovidType(covid_type) {
+      localStorage.setItem('covid_type', covid_type);
+      var els = document.getElementsByClassName('activebarcovid')
+      while (els[0]) {
+        els[0].classList.remove('activebarcovid')
+      }
+      document.getElementById(covid_type).classList.add('activebarcovid');
+      myValue = null;
+      if (localStorage.getItem('region')) {
+        region = localStorage.getItem('region');
+      }
+      loadChart(region, covid_type)
+    }
+
+    function changeRegion(region, covid_type) {
+      localStorage.setItem('region', region);
+      var els = document.getElementsByClassName('activebarregion')
+      while (els[0]) {
+        els[0].classList.remove('activebarregion')
+      }
+      document.getElementById(region).classList.add('activebarregion');
+
+      if (covid_type !== undefined) {
+        localStorage.setItem('covid_type', covid_type);
+      } else if (localStorage.getItem('covid_type')) {
+        covid_type = localStorage.getItem('covid_type');
+      } else {
+        //default to cases
+        covid_type = 'cases'
+      }
+      loadChart(region, covid_type)
+    }
+  </script>
+  <h4>
+    Coronavirus infections in the United States began spreading in the year 2020.
+    The virus was declared a pandemic by the CDC on March 21.
+    The virus did not begin in all areas simultaneously.
+    The rate of infection shows how the virus affected different regions of the country at different times.
+    In the early months of the pandemic tests were scarce.
+    It is presumed that there was a population who recovered who were never diagnosed.
+    Those that were severely ill were more likely to be tested. This causes mortality to decrease over time, as more
+    tests become available. Widespread vaccinations did not begin until 2021.
+  </h4>
+  <div class="bar">
+    <ul style="width: 288;">
+      <li><a id="Northeast" class="activebarregion" href="javascript:void(0)"
+          onclick="changeRegion('Northeast')">Northeast</a></li>
+      <li><a id="Midwest" href="javascript:void(0)" onclick="changeRegion('Midwest')">Midwest</a></li>
+      <li><a id="West" href="javascript:void(0)" onclick="changeRegion('West')">West</a></li>
+      <li style="float:right"><a id="South" href="javascript:void(0)" onclick="changeRegion('South')">South</a></li>
+    </ul>
+  </div>
+  <table>
+    <tr>
+      <th style="width: 20%"></th>
+      <th>Running Totals</th>
+    </tr>
+    <tr>
+      <td style="width: 20%">
+        <p id="leftcolumntext"></p>
+      </td>
+      <td>
+        <svg id="my_svg" width=700 height=700>
+        </svg>
+
+        <div class="bar">
+          <ul style="width: 220;">
+            <li><a id="cases" class="activebarcovid" href="javascript:void(0)"
+                onclick="changeCovidType('cases')">cases</a></li>
+            <li><a id="deaths" href="javascript:void(0)" onclick="changeCovidType('deaths')">deaths</a></li>
+            <li style="float:right;"><a id="mortality" href="javascript:void(0)"
+                onclick="changeCovidType('mortality')">mortality</a></li>
+          </ul>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <script>
+    async function loadChart(region, covid_type) {
+      console.log(region + " " + covid_type)
+      var lefttext = ""
+      var ydomain = 0
+      var datafile = "https://raw.githubusercontent.com/JasonVoss/JasonVoss.github.io/main/region_summary_" + region
+        .toLowerCase() + ".csv"
+      if (region == "Northeast") {
+        lefttext = n_p
+      } else if (region == "South") {
+        lefttext = s_p
+      } else if (region == "West") {
+        lefttext = w_p
+      } else if (region == "Midwest") {
+        lefttext = m_p
+      }
+      if (covid_type == 'cases') {
+        ydomain = 7700000
+      } else if (covid_type == 'deaths') {
+        ydomain = 120000
+      } else if (covid_type == 'mortality') {
+        ydomain = 10
+      }
+      document.getElementById("leftcolumntext").innerHTML = lefttext;
+      var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+      xs = d3.scaleBand().domain(months).range([0, 600]);
+      ys = d3.scaleLinear().domain([0, ydomain]).range([600, 0]);
+
+      data = await d3.csv(datafile)
+      //CLEAR
+      document.getElementById("my_svg").innerHTML = "";
+      d3.select("svg")
+        .append("g")
+        .attr("transform", "translate(50,50)")
+        .selectAll('rect')
+        .data(data)
+        //.filter(function (d, i) {
+        //  return d.month == "apr"
+        //})
+        .enter()
+        .append('rect')
+        .attr('x', function (d, i) {
+          return 12 + (50 * i);
+        })
+        .attr('y', function (d, i) {
+          return ys(d[covid_type]);
+        })
+        .attr('width', 26)
+        .attr('height', function (d, i) {
+          return 600 - ys(d[covid_type]);
+        })
+
+      d3.select("svg")
+        .append("g")
+        .attr("transform", "translate(50,650)")
+        .call(d3.axisBottom(xs));
+
+      if (covid_type == 'mortality') {
+        d3.select("svg")
+          .append("g")
+          .attr("transform", "translate(50,50)")
+          .call(d3.axisLeft(ys).tickFormat(d => d + "%"))
+
+        //annotations
+        d3.select("#my_svg")
+          .append("g")
+          .attr("class", "annotation-group")
+          .call(d3.annotation().annotations(mortality_annotations))
+
+      } else {
+        d3.select("svg")
+          .append("g")
+          .attr("transform", "translate(50,50)")
+          .call(d3.axisLeft(ys).tickFormat(d3.format("~s")))
+
+      }
+
+
+      if (covid_type == 'cases') {
+        //color bars
+        d3.selectAll('rect')
+          .attr('fill', 'blue')
+        //annotations
+        if (region == 'Northeast') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(cases_ne_annotations))
+        } else if (region == 'South') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(cases_s_annotations))
+        } else if (region == 'Midwest') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(cases_m_annotations))
+        } else {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(cases_w_annotations))
+        }
+      }
+
+      if (covid_type == 'deaths') {
+        //color bars
+        d3.selectAll('rect')
+          .attr('fill', 'red')
+
+        //annotations
+        if (region == 'Northeast') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(deaths_ne_annotations))
+        } else if (region == 'South') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(deaths_s_annotations))
+        } else if (region == 'Midwest') {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(deaths_m_annotations))
+        } else {
+          d3.select("#my_svg")
+            .append("g")
+            .attr("class", "annotation-group")
+            .call(d3.annotation().annotations(deaths_w_annotations))
+        }
+
+      }
+
+
+    }
+  </script>
+
+
+</body>
+
+</html>
