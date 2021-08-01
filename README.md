@@ -1,2 +1,2 @@
 # covid-narrative
-Interactive slideshow by region.  Virus affects different areas at different times.  User interacts to view mortality change over time.  
+Interactive slideshow by region.  Virus affects different areas at different times.  User interacts to view mortality change over time. The mortality is expected to decrease over time as coronavirus testing becomes more available. In the early months of the pandemic tests were scarce. It is presumed that there was a population who recovered who were never diagnosed. Those that were severely ill were more likely to be tested. 
