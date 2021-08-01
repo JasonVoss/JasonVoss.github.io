@@ -1,0 +1,93 @@
+<html>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
+<head>
+  <style>
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border: 1px solid #e7e7e7;
+      background-color: #f3f3f3;
+      position: fixed;
+      width: 532;
+    }
+
+    li {
+      float: left;
+    }
+
+    li a {
+      display: block;
+      color: #666;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      border-right: 1px solid #bbb;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    li a:hover {
+      background-color: #111;
+    }
+
+    .activebar {
+      background-color: #04AA6D;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    function changeQuarter(quarter) {
+      var els = document.getElementsByClassName('activebar')
+      while (els[0]) {
+        els[0].classList.remove('activebar')
+      }
+      document.getElementById(quarter).classList.add('activebar');
+    }
+  </script>
+  <h5>
+    Coronavirus infections in the United States began spreading in the year 2020.
+    The virus was declared a pandemic by the CDC on March 21.
+    The virus did not begin in all areas simultaneously.
+    The rate of infection shows how the virus affected different regions of the country at different times
+    and it shows how the virus spread from one area to another.
+  </h5>
+  <div class="bar">
+    <ul>
+      <li><a id="2020Q1" class="activebar" href="javascript:void(0)" onclick="changeQuarter('2020Q1')">2020 Q1</a></li>
+      <li><a id="2020Q2" href="javascript:void(0)" onclick="changeQuarter('2020Q2')">2020 Q2</a></li>
+      <li><a id="2020Q3" href="javascript:void(0)" onclick="changeQuarter('2020Q3')">2020 Q3</a></li>
+      <li><a id="2020Q4" href="javascript:void(0)" onclick="changeQuarter('2020Q4')">2020 Q4</a></li>
+      <li><a id="2021Q1" href="javascript:void(0)" onclick="changeQuarter('2021Q1')">2021 Q1</a></li>
+      <li style="float:right"><a id="2021Q2" href="javascript:void(0)" onclick="changeQuarter('2021Q2')">2021 Q2</a></li>
+    </ul>
+  </div>
+</body>
+<svg width=460 height=400>
+</svg>
+<script>
+  const annotations = [{
+    note: {
+      label: "Here is the annotation label",
+      title: "Annotation title"
+    },
+    x: 100,
+    y: 100,
+    dy: 100,
+    dx: 100
+  }]
+
+  // Add annotation to the chart
+  const makeAnnotations = d3.annotation()
+    .annotations(annotations)
+  d3.select("svg")
+    .append("g")
+    .call(makeAnnotations)
+</script>
+</body>
+
+</html>
